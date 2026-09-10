@@ -38,7 +38,9 @@ Prior art: [geminiAssist](https://github.com/AcideFluorhydrique/geminiAssist) (G
 
 ### Status
 
-**There are no binaries, and you should not accept one.** There is no release `signingConfig`, so the only artifact this repository produces is an `android:debuggable` debug APK, which must not be distributed. Build it yourself with `./gradlew assembleDebug`, and do not install an "Aquarius" APK from anyone, me included.
+v0.1.0, signed and on the [releases page](https://github.com/volo-ergo-sum/aquarius/releases). `arm64-v8a` only. Check the checksum and the signing certificate against the values under [Getting it](#getting-it) before you install it — and do not install an "Aquarius" APK that comes from anywhere else, whatever it claims.
+
+First release. It has been used daily on exactly one device, a Pixel 9a running Android 17. Everything in this README was measured there and nowhere else.
 
 ---
 
@@ -140,7 +142,8 @@ If you have seen a much more flattering comparison for this app, it was almost c
 - **A content-process crash costs you the page you were on.** `onCrash`/`onKill` reopen the session and reload `gemini.google.com/app`, so the app recovers by itself rather than sitting on a dead window — but it lands on the conversation list, not back where you were.
 - **A device without Google Play Services is untested.** `com.google.android.gms` was installed and enabled for every measurement here, and the APK carries GeckoView's Play Services FIDO client — 2,109 `com/google/android/gms` references across the dex files and a `GoogleApiActivity` in the merged manifest. The reasoning for keeping it, and the one-line change to build without it, are in a comment in `app/build.gradle.kts`. Nobody has run this on a GMS-less device. That is the single most useful issue you could open.
 - **A device with no Google account at all is untested.** The phone it was built on had six. What has been verified is that none of them were offered or used — the address had to be typed by hand — not that zero would also work.
-- **Debug builds only.** There is no release `signingConfig`, so `assembleRelease` produces an unsigned APK that Android will refuse to install. The debug APK is `android:debuggable`; do not distribute it.
+- **One device, one Android version.** Everything here was measured on a Pixel 9a running Android 17. No tablet, no foldable, no other manufacturer's build, no other Android version. `minSdk` is 31 because that is the floor it has been run at, not because 30 was tested and rejected.
+- **Cloning it will not reproduce this APK.** Release builds read `keystore.properties`, which is not in the repository. Without it `assembleRelease` produces an unsigned APK that Android refuses to install; `assembleDebug` works as normal. A build you make is signed by your key, not mine, so Android will treat it as a different app.
 
 ## The User-Agent question
 
@@ -207,7 +210,21 @@ The GeckoView AAR's own declarations can be checked with `unzip -p geckoview-*.a
 
 ## Getting it
 
-There is nothing to get yet, and the reason is worth stating plainly rather than leaving as an absence.
+**[Releases](https://github.com/volo-ergo-sum/aquarius/releases)** — `arm64-v8a` only. There is no other ABI in the build, so this will not install on an x86_64 device or emulator.
+
+Verify what you downloaded before you install it. Not as ceremony: this is a 200 MiB binary from a stranger on the internet, and the whole argument of this README is that you should not have to take anyone's word for anything.
+
+```console
+$ sha256sum app-arm64-v8a-release.apk
+07a7aea416336286cbaffcc72c0fd1d81d66c6f12a153d04b72bd360bae03f2f
+
+$ apksigner verify --print-certs app-arm64-v8a-release.apk
+Signer #1 certificate SHA-256 digest: f6c45e9f6b205b57eaffe07660845d6b3fc1f227fdfb5d4d90a5b3b623d09d8c
+```
+
+That certificate digest is the app's identity. Android will refuse to update an install signed by a different key, which is the property that matters: if a future release does not match, something is wrong, and no amount of matching version numbers changes that. On a device, AppVerifier reads the same value.
+
+The APK is 205,378,798 bytes (195.9 MiB). Obtainium can follow the releases page directly.
 
 **No store can take this today.**
 

@@ -1,5 +1,24 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
+}
+
+// Signing material for release builds, read from a file the repository does not
+// contain. keystore.properties and *.jks are both in .gitignore; the keystore
+// itself lives outside the working tree entirely, so a stray `git add -A` cannot
+// reach it.
+//
+// Absent - which is the case for anyone who clones this - debug builds work
+// exactly as before and assembleRelease produces an unsigned APK that Android
+// refuses to install. That is the intended failure: an unsigned artifact that
+// will not install is better than one signed with a key everybody has.
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        FileInputStream(keystorePropertiesFile).use { load(it) }
+    }
 }
 
 android {
@@ -35,9 +54,36 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            if (keystorePropertiesFile.exists()) {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+            // v1 is dead weight above API 24 and this is minSdk 31. v3 is not
+            // optional though: it is the scheme that carries a proof-of-rotation
+            // record, so an APK signed without it can never be re-keyed - if the
+            // key is ever lost or compromised, every install is stranded.
+            enableV1Signing = false
+            enableV2Signing = true
+            enableV3Signing = true
+        }
+    }
+
     buildTypes {
         release {
+            // R8 is left off. GeckoView is ~70% of the package and none of it is
+            // Java that shrinking would touch; what it would touch is a few
+            // hundred KB of this app and androidx, against the cost of every
+            // stack trace from a user arriving obfuscated.
             isMinifyEnabled = false
+            signingConfig = if (keystorePropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                null
+            }
         }
     }
 
