@@ -1,0 +1,56 @@
+name: It ran (or did not) without Google Play Services
+description: The one test nobody has done. GrapheneOS without the sandboxed Play compatibility layer, CalyxOS, LineageOS without GApps, /e/OS, microG — any of it.
+title: "[GMS-less] "
+labels: ["untested-environment"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every measurement in the README was taken on one Pixel 9a with Play Services installed and enabled. Whether this runs at all without it is unknown, and the APK does carry GeckoView's Play Services FIDO client — 2,109 `com/google/android/gms` references in the dex.
+
+        A result either way is useful. "It crashed on launch" is as valuable as "it worked", and more valuable than nothing.
+  - type: input
+    id: os
+    attributes:
+      label: OS and version
+      placeholder: GrapheneOS 2026090100, Android 17
+    validations:
+      required: true
+  - type: dropdown
+    id: gms
+    attributes:
+      label: What is on the device
+      options:
+        - No Play Services at all
+        - microG
+        - GrapheneOS sandboxed Google Play, installed but not in this profile
+        - GrapheneOS sandboxed Google Play, installed in this profile
+        - Something else (describe below)
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: What happened
+      options:
+        - Launched and I could sign in and use it
+        - Launched, but sign-in failed
+        - Launched to a blank page
+        - Crashed on launch
+        - Would not install
+      multiple: false
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: logcat, if it failed
+      description: |
+        `adb logcat -d -b crash | grep -A30 dev.volo.aquarius`, or the same filtered on `GeckoRuntime`. Paste whatever you have — a partial trace beats a description.
+      render: text
+  - type: input
+    id: account
+    attributes:
+      label: Google accounts on the device
+      description: How many, if any, were signed in to Android itself (not to the app). Zero is an interesting answer — that case is also untested.
+      placeholder: "0"

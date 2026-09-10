@@ -1,0 +1,9 @@
+An unofficial, single-site GeckoView wrapper around gemini.google.com. One activity, one GeckoSession, one site — Mozilla's engine, its own cookie jar, no address bar and no tabs. Not affiliated with, endorsed by, or sponsored by Google.
+
+The stock Gemini app is 5.0 MiB, declares three permissions and no INTERNET, and launching it brings a com.google.android.googlequicksearchbox activity to the foreground: it is a launcher for the Google app. On a Pixel 9a running Android 17, with that package disabled and no GSA process left running, Aquarius signed in and rendered Gemini in 215 ms.
+
+That tests independence from Google's apps, not from Play Services, which was installed and enabled throughout. Whether this runs on a device without Play Services is untested.
+
+It is not lighter and it is not faster. Measured at the same moment, it uses about 12% more PSS and 32% more RSS than the pair it replaces, because GeckoView maps a 145 MiB libxul.so into each content process, and the APK is 195.9 MiB. What it buys is independence.
+
+Gemini Live does not exist in the web app, so this cannot provide it. There is no share target, it does not take the assistant role, passkey sign-in is not wired up, and Workspace SSO is untested. arm64-v8a only.

@@ -1,0 +1,1 @@
+Unofficial single-site Gemini client on GeckoView. Runs with the Google app off.

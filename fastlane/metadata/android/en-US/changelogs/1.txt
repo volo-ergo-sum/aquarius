@@ -1,0 +1,10 @@
+First release.
+
+Opens gemini.google.com/app in an embedded GeckoView. Voice input, image
+and file attachments, downloads. The session lives in a Gecko profile
+inside the app's own sandbox and is excluded from Android backup.
+
+Verified on a Pixel 9a running Android 17: cold start 215 ms with
+com.google.android.googlequicksearchbox disabled.
+
+arm64-v8a only.

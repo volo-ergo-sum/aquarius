@@ -1,0 +1,42 @@
+name: Something is broken
+description: It does not do what it says it does.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: the README's [Things it does not do](https://github.com/volo-ergo-sum/aquarius#things-it-does-not-do) list is long and deliberate. Gemini Live, the share sheet, the assistant role and passkeys are all absent by design or by limitation, not by oversight.
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: Pixel 8, Android 16
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Aquarius version
+      description: Settings → Apps → Aquarius, or `adb shell dumpsys package dev.volo.aquarius | grep versionName`
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected instead
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to get there from a fresh launch
+      description: Numbered steps. If it only happens sometimes, say roughly how often.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: logcat
+      description: "`adb logcat -d | grep -iE 'aquarius|Gecko'`"
+      render: text
