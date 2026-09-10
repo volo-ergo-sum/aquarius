@@ -47,7 +47,7 @@ You launch `com.google.android.apps.bard`; what comes to the foreground belongs 
 
 | | Stock path | Aquarius |
 |---|---|---|
-| App you tap | `com.google.android.apps.bard`, **5.0 MiB** (5,205,799 B across 4 splits) | `dev.volo.aquarius`, **199.7 MiB** |
+| App you tap | `com.google.android.apps.bard`, **5.0 MiB** (5,205,799 B across 4 splits) | `dev.volo.aquarius`, **209.0 MiB** |
 | Permissions declared by that app | 3, no `INTERNET` | 4 (see table below) |
 | What actually renders the UI | GSA, **364.8 MiB** installed (382,480,741 B across 6 splits) | this APK |
 | Sign-in state lives in | the device's Google account | this app's UID sandbox |
@@ -91,7 +91,7 @@ If you have seen a much more flattering comparison for this app, it was almost c
 
 ### The APK is about 200 MB
 
-209,352,956 bytes, of which `libxul.so` is 152,296,768 bytes — 73 % of the package. This is what a complete independent browser engine costs. `arm64-v8a` only; there is no other ABI in the build. Installing takes roughly a minute because the device has to verify and optimise all of it.
+219,128,070 bytes, of which `libxul.so` is 152,296,768 bytes — 70 % of the package. This is what a complete independent browser engine costs. `arm64-v8a` only; there is no other ABI in the build. Installing takes roughly a minute because the device has to verify and optimise all of it.
 
 ### Things it does not do
 
