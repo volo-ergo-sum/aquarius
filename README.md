@@ -1,6 +1,44 @@
 # Aquarius
 
-**Aquarius is an independent, unofficial client.** It is not affiliated with, endorsed by, or sponsored by Google. Gemini and Google are trademarks of Google LLC. Aquarius loads the public `gemini.google.com` website in Mozilla's GeckoView engine — the same way any browser opens the same page. The name, the icon, and all of the code here belong to this project; no Google branding or artwork is used.
+**An unofficial, single-site GeckoView wrapper around `gemini.google.com`.** One activity, one `GeckoSession`, one site — Mozilla's engine, its own cookie jar, no address bar and no tabs. There is no `VIEW`/`BROWSABLE` intent filter, so it never appears in your link disambiguation dialog; that is a design choice, not a security feature. Not affiliated with, endorsed by, or sponsored by Google. Gemini and Google are trademarks of Google LLC; this loads their public web app the way any browser does, and you sign in to Google yourself.
+
+### The measurement it exists for
+
+The stock Gemini app, `com.google.android.apps.bard`, is 5.0 MiB, declares three permissions and no `INTERNET`, and `am start -W` on it brings a `com.google.android.googlequicksearchbox` activity to the foreground. It is a launcher for the Google app. Which raises a question better answered with a command than an opinion: does a client for the same site need either package?
+
+On a Pixel 9a running Android 17, on 2026-09-11:
+
+```console
+$ adb shell pm disable-user --user 0 com.google.android.googlequicksearchbox
+$ adb shell pm disable-user --user 0 com.google.android.apps.bard
+```
+
+With both disabled and `adb shell ps -A` showing no `googlequicksearchbox` process left running, Aquarius signed in and rendered Gemini. That run's cold start was 527 ms. `pm enable` on each package puts them back — disabling the Google app also takes Assistant and Discover with it, so undo it if you use those.
+
+**Be precise about what that is.** It tests dependence on Google's *apps*, not on Google Play Services. `com.google.android.gms` was installed and enabled throughout, the device had six Google accounts signed in, and the APK carries GeckoView's Play Services FIDO client (`play-services-fido:21.3.0`, a transitive dependency that is deliberately kept — see the comment in `app/build.gradle.kts`). `strings -a classes*.dex | grep -c 'com/google/android/gms'` returns 2109 on the shipped APK, and the merged manifest declares a `GoogleApiActivity`. **Whether any of this runs on a device without Play Services is untested.** Nobody has tried it; that is the single most useful issue you could open.
+
+### What it costs
+
+Read this before you decide, not after. Methodology and the rest of the numbers are in **[Where it loses](#where-it-loses)**.
+
+| Both apps launched and settled, measured at the same moment | Aquarius | bard + GSA |
+|---|---|---|
+| PSS | **538 MiB** | 480 MiB |
+| RSS | **1,133 MiB** | 856 MiB |
+
+That is about 12 % more PSS and 32 % more RSS than the thing it replaces. GeckoView maps a 145 MiB `libxul.so` into each content process; that is where it goes. The APK is 219,128,070 bytes (209 MiB), of which `libxul.so` is 152,296,768 — roughly 70 % of the package — and `arm64-v8a` is the only ABI in the build. Gemini Live does not exist in the `gemini.google.com` web app, so wrapping the web app cannot provide it; there is no share target, and it does not take the assistant role. The rest of that list is under [Things it does not do](#things-it-does-not-do).
+
+### Who this is for
+
+- **You keep `com.google.android.googlequicksearchbox` disabled** and still want Gemini. That is the case above, and the commands are there so you can check it on your own device instead of taking my word for it.
+- **You already run Fennec, IronFox or Firefox** and Gecko is not a drawback to you. It is the same engine — but Aquarius applies none of the hardening those builds do, and unlike IronFox, which substitutes microG's FIDO implementation, it ships Google's FIDO client exactly as GeckoView delivers it.
+- **Not for you** if you want a smaller install or less memory. It is worse at both. What this buys is independence, not efficiency.
+
+Prior art: [geminiAssist](https://github.com/AcideFluorhydrique/geminiAssist) (GPL-3.0), self-described as a WebView wrapper for the same site, has been on F-Droid since May 2026 and its current build is 0.8 MiB. Aquarius is a different design, not a superset of it.
+
+### Status
+
+**There are no binaries, and you should not accept one.** There is no release `signingConfig`, so the only artifact this repository produces is an `android:debuggable` debug APK, which must not be distributed. Build it yourself with `./gradlew assembleDebug`, and do not install an "Aquarius" APK from anyone, me included.
 
 ---
 
@@ -8,9 +46,9 @@
 
 Android 純正の Gemini アプリ（`com.google.android.apps.bard`）は、実体としては 5 MB のランチャーです。INTERNET 権限すら宣言しておらず、タップすると前面に来るのは別パッケージ — Google アプリ（GSA、インストール実測 365 MiB）のアクティビティです。
 
-Aquarius は `gemini.google.com/app` を GeckoView（Firefox のエンジン）で開くだけの、1 画面・1 サイトの独立クライアントです。ログインのセッションはこのアプリの UID サンドボックス内だけに存在し、端末の Google アカウントとも、クラウドバックアップとも繋がりません。
+Aquarius は `gemini.google.com/app` を GeckoView（Firefox のエンジン）で開くだけの、1 画面・1 サイトの独立クライアントです。ログインのセッションはこのアプリの UID サンドボックス内だけに存在し、端末の Google アカウントからは参照されず、クラウドバックアップにも載りません。ただし Google Play Services 非搭載の端末で動くかは**未検証**です。
 
-**正直に言うべきこと**: これはメモリ削減にはなりません。実測すると Aquarius のほうが**多く**使います（同時刻の PSS で 538 MiB 対 480 MiB）。APK も約 200 MB あります。得られるのは独立性であって、軽さではありません。数字と測り方は下の "Where it loses" に全部書いてあります。
+**正直に言うべきこと**: これはメモリ削減にはなりません。実測すると Aquarius のほうが**多く**使います（同時刻の PSS で 538 MiB 対 480 MiB）。APK は 209 MiB あります。得られるのは独立性であって、軽さではありません。数字と測り方は下の "Where it loses" に全部書いてあります。
 
 ---
 
@@ -69,8 +107,6 @@ Read this modestly. It is a real but small difference, it is noisy, and `TotalTi
 
 ## Where it loses
 
-This is the section most READMEs leave out.
-
 ### Memory is worse, not better
 
 Both apps launched, both left to settle, measured at the same moment:
@@ -89,7 +125,7 @@ Aquarius uses roughly 12 % more PSS and 32 % more RSS than the thing it replaces
 
 If you have seen a much more flattering comparison for this app, it was almost certainly comparing Google's **RSS** against Aquarius's **PSS**. RSS counts every shared page once per process; PSS divides shared pages among the processes sharing them. For an engine that maps one enormous shared library into five processes, that difference is the entire result. Compare like with like and the advantage disappears.
 
-### The APK is about 200 MB
+### The APK is 209 MiB
 
 219,128,070 bytes, of which `libxul.so` is 152,296,768 bytes — 70 % of the package. This is what a complete independent browser engine costs. `arm64-v8a` only; there is no other ABI in the build. Installing takes roughly a minute because the device has to verify and optimise all of it.
 
@@ -102,6 +138,8 @@ If you have seen a much more flattering comparison for this app, it was almost c
 - **Google Workspace / school accounts (SAML SSO) are untested.** Redirects are no longer filtered by host — a sign-in that bounces through an identity provider on the organisation's own domain now stays in the app instead of being ejected to the system browser. That removes the reason it could not work; nobody has confirmed that it does. Tested sign-in here was a personal account with a password and 2FA.
 - **Passkeys are unlikely to work.** The app sets no `GeckoRuntime.ActivityDelegate`, and it is not on the allowlist for Google's privileged FIDO2 API. Password plus 2FA works; this is how it was tested.
 - **A content-process crash costs you the page you were on.** `onCrash`/`onKill` reopen the session and reload `gemini.google.com/app`, so the app recovers by itself rather than sitting on a dead window — but it lands on the conversation list, not back where you were.
+- **A device without Google Play Services is untested.** `com.google.android.gms` was installed and enabled for every measurement here, and the APK carries GeckoView's Play Services FIDO client — 2,109 `com/google/android/gms` references across the dex files and a `GoogleApiActivity` in the merged manifest. The reasoning for keeping it, and the one-line change to build without it, are in a comment in `app/build.gradle.kts`. Nobody has run this on a GMS-less device. That is the single most useful issue you could open.
+- **A device with no Google account at all is untested.** The phone it was built on had six. What has been verified is that none of them were offered or used — the address had to be typed by hand — not that zero would also work.
 - **Debug builds only.** There is no release `signingConfig`, so `assembleRelease` produces an unsigned APK that Android will refuse to install. The debug APK is `android:debuggable`; do not distribute it.
 
 ## The User-Agent question
@@ -167,6 +205,23 @@ $ adb shell dumpsys package dev.volo.aquarius | grep -A3 'runtime permissions:'
 
 The GeckoView AAR's own declarations can be checked with `unzip -p geckoview-*.aar AndroidManifest.xml`.
 
+## Getting it
+
+There is nothing to get yet, and the reason is worth stating plainly rather than leaving as an absence.
+
+**No store can take this today.**
+
+| | Why not |
+|---|---|
+| F-Droid | Not a size problem — F-Droid ships Fennec at 120.7 MiB. `maven.mozilla.org` is not among the Maven repositories `fdroidserver` will build against, and the inclusion policy rules out dependencies on Google Play Services, which this has. |
+| IzzyOnDroid | 30 MB ceiling. |
+| Accrescent | 128 MiB ceiling, and debug-signed builds are refused. |
+| Google Play | Not attempted. |
+
+What is left is GitHub Releases (2 GiB per file, no cap on total release traffic), a self-hosted F-Droid repository — a URL ending in `/fdroid/repo/` is one tap to add in the F-Droid client — and Obtainium pointed at the releases.
+
+None of that happens before there is a release `signingConfig`. Until then the only artifact is an `android:debuggable` debug APK, which nobody should install and I will not publish. Build it yourself.
+
 ## Building
 
 Nothing here depends on the author's machine.
@@ -224,4 +279,4 @@ Aquarius is built on Mozilla's open-source GeckoView technology. **Aquarius is n
 
 ## Trademarks
 
-"Gemini" and "Google" are trademarks of Google LLC. "Firefox" and "GeckoView" are trademarks of the Mozilla Foundation. This project is affiliated with neither, and merely loads the public `gemini.google.com` website in an independent browser engine.
+"Gemini" and "Google" are trademarks of Google LLC. Firefox is a trademark of the Mozilla Foundation in the U.S. and other countries. GeckoView is a Mozilla project distributed under the MPL-2.0. This project is affiliated with neither, and merely loads the public `gemini.google.com` website in an independent browser engine.
