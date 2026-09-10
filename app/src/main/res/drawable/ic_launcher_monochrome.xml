@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed-icon layer: same geometry, one colour, stroked heavier. The launcher
+     tints this flat, so the gradient would be thrown away, and a glyph tinted
+     onto a tinted ground loses the contrast the white background was giving it. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M26,44 q14,-14 28,0 q14,14 28,0"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="10"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+    <path android:pathData="M26,64 q14,-14 28,0 q14,14 28,0"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="10"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+</vector>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The default resources are Japanese; these are the same three strings for
+     everyone else. app_name is deliberately absent - the app is called Aquarius
+     in every locale. -->
+<resources>
+    <string name="no_browser">No browser available to open this link</string>
+    <string name="save_failed">Could not save the file</string>
+    <string name="saved_as">Saved: %1$s</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- decelerate rather than linear: the wave arrives quickly and settles, which
+     is what makes it read as liquid rather than as a progress bar. -->
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:propertyName="trimPathEnd"
+    android:valueFrom="0"
+    android:valueTo="1"
+    android:valueType="floatType"
+    android:duration="620"
+    android:interpolator="@android:interpolator/decelerate_quint" />

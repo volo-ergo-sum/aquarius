@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The GeckoView is wrapped rather than being the root because the window
+     insets are applied as padding, and padding has to go on something that
+     lays the engine's surface out inside it.
+
+     The loading view sits outside that padding, filling the whole window, so
+     the waves stay centred on the screen rather than on the padded viewport -
+     otherwise they jump when the keyboard or the status bar changes the
+     padding mid-load. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_background">
+
+    <FrameLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.mozilla.geckoview.GeckoView
+            android:id="@+id/gecko"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/loading"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_gravity="center"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_splash_loop" />
+
+</FrameLayout>

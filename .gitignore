@@ -1,0 +1,12 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+
+# Signing material. Nothing here belongs in a repository, and a key that has
+# been pushed once is compromised even after the commit is removed.
+*.jks
+*.keystore
+keystore.properties
+signing.properties

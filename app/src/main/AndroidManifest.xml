@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Gemini's voice input is not the Web Speech API: the page opens a raw
+         getUserMedia stream and streams the PCM itself. Gecko asks the embedder
+         for the Android permission, so it has to be declared here - the
+         GeckoView AAR declares neither of these. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Aquarius.Starting"
+
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules">
+        <!-- allowBackup defaults to TRUE and Auto Backup covers getFilesDir(),
+             which is exactly where Gecko puts the profile. Left alone, this
+             app's cookies.sqlite and key4.db - the entire signed-in session -
+             would be copied to the Drive of one of the device's Google
+             accounts and restored on reinstall. The whole point of this app is
+             that its session belongs to nobody but itself, so the two of these
+             are a feature, not boilerplate. Firefox itself ships the same way
+             (its pkgFlags carry no ALLOW_BACKUP). -->
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode|density|fontScale|layoutDirection"
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- Deliberately NOT a browser: no VIEW/BROWSABLE filter for http(s).
+             This app opens exactly one site. Registering as a browser would put
+             it in the disambiguation dialog for every link on the device. -->
+
+    </application>
+
+</manifest>

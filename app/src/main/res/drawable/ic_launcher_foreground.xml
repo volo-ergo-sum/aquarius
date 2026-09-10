@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Aquarius glyph: two waves. Drawn by hand rather than set as U+2652, so
+     no font licence comes along with it. The sign is ancient and nobody's
+     property; this drawing of it is the project's own.
+
+     The shape is point symmetric about (54,54). That needs an EVEN number of
+     half-humps per wave: with two, f(c+d) = -f(c-d), and the pair maps onto
+     itself under a 180 degree turn. Three would give mirror symmetry instead,
+     which is not the same thing and looks it.
+
+     The waves clear each other by 6.1 units measured perpendicular to the
+     stroke. Vertical separation is the wrong thing to check - the gap normal to
+     a wave is sep * cos(atan(slope)), and an earlier version with four steeper
+     humps had 18 * cos(63 deg) = 8.05 against a stroke of 8, so the waves
+     touched wherever they were steepest and the glyph closed into a blob.
+
+     Four explicit quadratics rather than the "t" shorthand: same curve to
+     Android's parser, but the shorthand reflects the previous control point, so
+     one wrong sign silently turns a wave into a row of arches.
+
+     Colours are the earlier Gemini wordmark's blue-to-red ramp, sampled off the
+     logo: #1B7CFF at the left, through #718EF2 and #DB6693, to #F44C65 at the
+     right. Blue holds for most of the run and only turns in the last third,
+     which is what keeps it from reading as a generic rainbow. No yellow and no
+     green on purpose. A linear ramp, not the sweep the current four-colour mark
+     uses - the palette is reused, none of Google's artwork is.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M26,44 q14,-14 28,0 q14,14 28,0"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="22" android:startY="54"
+                android:endX="86"   android:endY="54">
+                <item android:offset="0.00" android:color="#FF1B7CFF" />
+                <item android:offset="0.45" android:color="#FF1489E9" />
+                <item android:offset="0.66" android:color="#FF718EF2" />
+                <item android:offset="0.86" android:color="#FFDB6693" />
+                <item android:offset="1.00" android:color="#FFF44C65" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <path
+        android:pathData="M26,64 q14,-14 28,0 q14,14 28,0"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="22" android:startY="54"
+                android:endX="86"   android:endY="54">
+                <item android:offset="0.00" android:color="#FF1B7CFF" />
+                <item android:offset="0.45" android:color="#FF1489E9" />
+                <item android:offset="0.66" android:color="#FF718EF2" />
+                <item android:offset="0.86" android:color="#FFDB6693" />
+                <item android:offset="1.00" android:color="#FFF44C65" />
+            </gradient>
+        </aapt:attr>
+    </path>
+</vector>

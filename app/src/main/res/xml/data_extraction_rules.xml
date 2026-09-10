@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Android 12+ half of allowBackup="false". allowBackup alone still lets
+     device-to-device transfer copy the app, and on API 31+ the two channels are
+     configured here rather than by that one flag, so both are excluded
+     explicitly. Excluding the whole domain rather than naming files means a
+     future Gecko that moves the profile cannot silently opt back in. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>

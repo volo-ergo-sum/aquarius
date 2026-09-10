@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator android:propertyName="strokeAlpha" android:valueFrom="0" android:valueTo="0.9"
+        android:valueType="floatType" android:startOffset="700"
+        android:duration="260" android:interpolator="@android:interpolator/decelerate_cubic" />
+    <objectAnimator android:propertyName="trimPathOffset" android:valueFrom="0" android:valueTo="1"
+        android:valueType="floatType" android:startOffset="700"
+        android:duration="1150" android:repeatCount="infinite" android:repeatMode="restart"
+        android:interpolator="@android:anim/linear_interpolator" />
+</set>

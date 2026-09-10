@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Splash geometry. Four paths, not two: the pair underneath are the waves
+     themselves, drawn in from nothing by the animated-vector wrapper, and the
+     pair on top are a short bright segment that then runs along them on a loop.
+
+     The loop is the point. The draw-in finishes in about 600ms but the splash
+     stays up until the page paints, which measured 2-3s on this device - so
+     without something continuing to move, what you actually see is a still icon
+     for two seconds and the animation reads as broken. Measured before adding
+     this: the wave pixel count climbed 1156 -> 3604 over four frames and then
+     sat at 3604 for the next eighteen.
+
+     The shine paths start fully transparent. Otherwise the trimmed segment sits
+     visible at the head of the path during the draw-in, as a white blot on a
+     wave that has not arrived yet. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+
+    <path android:name="wave_top"
+        android:pathData="M26,44 q14,-14 28,0 q14,14 28,0"
+        android:strokeWidth="8" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:trimPathStart="0" android:trimPathEnd="0">
+        <aapt:attr name="android:strokeColor"><gradient android:type="linear"
+                android:startX="22" android:startY="54" android:endX="86" android:endY="54">
+                <item android:offset="0.00" android:color="#FF1B7CFF" />
+                <item android:offset="0.45" android:color="#FF1489E9" />
+                <item android:offset="0.66" android:color="#FF718EF2" />
+                <item android:offset="0.86" android:color="#FFDB6693" />
+                <item android:offset="1.00" android:color="#FFF44C65" />
+            </gradient></aapt:attr>
+    </path>
+
+    <path android:name="wave_bottom"
+        android:pathData="M26,64 q14,-14 28,0 q14,14 28,0"
+        android:strokeWidth="8" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:trimPathStart="0" android:trimPathEnd="0">
+        <aapt:attr name="android:strokeColor"><gradient android:type="linear"
+                android:startX="22" android:startY="54" android:endX="86" android:endY="54">
+                <item android:offset="0.00" android:color="#FF1B7CFF" />
+                <item android:offset="0.45" android:color="#FF1489E9" />
+                <item android:offset="0.66" android:color="#FF718EF2" />
+                <item android:offset="0.86" android:color="#FFDB6693" />
+                <item android:offset="1.00" android:color="#FFF44C65" />
+            </gradient></aapt:attr>
+    </path>
+
+    <path android:name="shine_top"
+        android:pathData="M26,44 q14,-14 28,0 q14,14 28,0"
+        android:strokeColor="#FFFFFFFF" android:strokeAlpha="0"
+        android:strokeWidth="8" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:trimPathStart="0" android:trimPathEnd="0.16" android:trimPathOffset="0" />
+
+    <path android:name="shine_bottom"
+        android:pathData="M26,64 q14,-14 28,0 q14,14 28,0"
+        android:strokeColor="#FFFFFFFF" android:strokeAlpha="0"
+        android:strokeWidth="8" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:trimPathStart="0" android:trimPathEnd="0.16" android:trimPathOffset="0" />
+</vector>

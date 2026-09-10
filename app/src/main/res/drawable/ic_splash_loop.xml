@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The loading animation this app draws itself, in an ImageView over the
+     GeckoView. Same waves, plus a bright segment that runs along them forever -
+     "forever" being fine here because nothing outside this app decides when it
+     stops. MainActivity fades the view out on the page's first paint. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_splash_waves">
+    <target android:name="wave_top" android:animation="@animator/wave_draw_top" />
+    <target android:name="wave_bottom" android:animation="@animator/wave_draw_bottom" />
+    <target android:name="shine_top" android:animation="@animator/shine_top_set" />
+    <target android:name="shine_bottom" android:animation="@animator/shine_bottom_set" />
+</animated-vector>

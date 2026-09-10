@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The platform splash's icon. Finite on purpose.
+     windowSplashScreenAnimationDuration caps at 1000ms and the system will not
+     run an unbounded animation here - giving it one made it draw no icon at
+     all, verified by recording a launch and finding 809 non-black pixels on
+     screen, which is the status bar and the gesture pill and nothing else.
+     The looping version lives in ic_splash_loop.xml and runs in a view this app
+     owns, where no such limit applies. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_splash_waves">
+    <target android:name="wave_top" android:animation="@animator/wave_draw_top" />
+    <target android:name="wave_bottom" android:animation="@animator/wave_draw_bottom" />
+</animated-vector>

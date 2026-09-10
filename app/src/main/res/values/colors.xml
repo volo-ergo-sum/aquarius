@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The strip behind the status bar and the strip the keyboard pushes up from
+     are ours to paint, not the page's, so they have to match what the page
+     actually draws or the seam shows.
+
+     Measured, not guessed: a screenshot of gemini.google.com/app on this phone
+     reads #000000 at the top and through the body. The light value is the
+     matching white; Gemini's light theme is plain white behind the header. -->
+<resources>
+    <color name="page_background">#FFFFFFFF</color>
+</resources>

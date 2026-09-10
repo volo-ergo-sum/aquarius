@@ -1,0 +1,40 @@
+Aquarius
+Copyright 2026 volo-ergo-sum
+
+This product includes software developed by the Mozilla Foundation.
+
+--------------------------------------------------------------------------------
+GeckoView
+--------------------------------------------------------------------------------
+
+Aquarius links against GeckoView, the Android embedding of Mozilla's Gecko
+engine, as a binary dependency:
+
+    org.mozilla.geckoview:geckoview
+
+GeckoView is licensed under the Mozilla Public License, Version 2.0. A copy of
+the MPL is available at:
+
+    https://www.mozilla.org/MPL/2.0/
+
+Source for the exact GeckoView build this project depends on is published by
+Mozilla at:
+
+    https://hg.mozilla.org/mozilla-central/
+    https://maven.mozilla.org/maven2/org/mozilla/geckoview/
+
+No file of Mozilla's is modified by this project. The version depended on is
+pinned in app/build.gradle.kts.
+
+GeckoView in turn bundles components under other licences, including
+LGPL-2.1 media libraries (FFmpeg-derived decoders, libSoundTouch). Their source
+is obtainable from the mozilla-central tree above.
+
+--------------------------------------------------------------------------------
+Trademarks
+--------------------------------------------------------------------------------
+
+Gemini and Google are trademarks of Google LLC. Firefox and Gecko are trademarks
+of the Mozilla Foundation. This project is not affiliated with, endorsed by, or
+sponsored by either. Those names appear here only to say accurately what this
+software talks to and what it is built on.

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aquarius</string>
+    <string name="no_browser">開けるブラウザがありません</string>
+    <string name="save_failed">保存できませんでした</string>
+    <string name="saved_as">保存しました: %1$s</string>
+</resources>
